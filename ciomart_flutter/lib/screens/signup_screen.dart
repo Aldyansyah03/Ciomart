@@ -3,38 +3,43 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../utils/constants.dart';
-import 'admin_dashboard.dart';
-import 'cashier_dashboard.dart';
-import 'signup_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _fullNameController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  String _selectedRole = 'CASHIER';
 
-  void _handleLogin() async {
+  void _handleRegister() async {
+    if (_fullNameController.text.isEmpty || _usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Harap isi semua kolom')),
+      );
+      return;
+    }
+
     final authViewModel = context.read<AuthViewModel>();
-    final success = await authViewModel.login(
+    final success = await authViewModel.register(
+      _fullNameController.text,
       _usernameController.text,
       _passwordController.text,
+      _selectedRole,
     );
 
     if (!mounted) return;
 
     if (success) {
-      if (authViewModel.currentUser?.role == 'ADMIN') {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const AdminDashboard()));
-      } else {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const CashierDashboard()));
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Registrasi berhasil! Silakan login.', style: TextStyle(color: Colors.white)), backgroundColor: AppColors.success),
+      );
+      Navigator.of(context).pop(); // Kembali ke halaman login
     }
   }
 
@@ -42,6 +47,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -62,40 +75,17 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [AppColors.brandOrange, AppColors.brandRed],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.brandOrange.withOpacity(0.3),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      )
-                    ],
-                  ),
-                  child: const Center(
-                    child: Text('🏪', style: TextStyle(fontSize: 40)),
-                  ),
-                ),
-                const SizedBox(height: 24),
                 Text(
-                  'CIOMART',
+                  'Buat Akun Baru',
                   style: GoogleFonts.inter(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w800,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Sistem Manajemen Kasir Mini Market',
+                  'Daftarkan akun kasir atau admin Anda',
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     color: AppColors.textSecondary,
@@ -130,6 +120,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text('📝 NAMA LENGKAP', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _fullNameController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xFFF8FAFC),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.cardBorder)),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.cardBorder)),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.brandOrange, width: 2)),
+                        hintText: 'John Doe',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     Text('👤 USERNAME', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                     const SizedBox(height: 8),
                     TextField(
@@ -137,22 +141,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: const Color(0xFFF8FAFC),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: AppColors.cardBorder),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: AppColors.cardBorder),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: AppColors.brandOrange, width: 2),
-                        ),
-                        hintText: 'Masukkan username...',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.cardBorder)),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.cardBorder)),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.brandOrange, width: 2)),
+                        hintText: 'johndoe123',
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
                     Text('🔒 PASSWORD', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                     const SizedBox(height: 8),
                     TextField(
@@ -161,19 +156,34 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: const Color(0xFFF8FAFC),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: AppColors.cardBorder),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.cardBorder)),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.cardBorder)),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.brandOrange, width: 2)),
+                        hintText: 'Minimal 6 karakter',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text('🎯 PERAN (ROLE)', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.cardBorder),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: _selectedRole,
+                          isExpanded: true,
+                          items: const [
+                            DropdownMenuItem(value: 'CASHIER', child: Text('Kasir')),
+                            DropdownMenuItem(value: 'ADMIN', child: Text('Admin')),
+                          ],
+                          onChanged: (val) {
+                            if (val != null) setState(() => _selectedRole = val);
+                          },
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: AppColors.cardBorder),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: AppColors.brandOrange, width: 2),
-                        ),
-                        hintText: 'Masukkan password...',
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -183,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Consumer<AuthViewModel>(
                         builder: (context, auth, _) {
                           return ElevatedButton(
-                            onPressed: auth.isLoading ? null : _handleLogin,
+                            onPressed: auth.isLoading ? null : _handleRegister,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.brandOrange,
                               foregroundColor: Colors.white,
@@ -194,26 +204,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: auth.isLoading 
                                 ? const CircularProgressIndicator(color: Colors.white)
-                                : Text('🚀 Login ke Sistem', style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold)),
+                                : Text('Daftar Akun', style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold)),
                           );
                         }
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Center(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => const SignUpScreen()));
-                        },
-                        child: Text(
-                          'Belum punya akun? Daftar di sini (Sign Up)',
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.brandOrange,
-                          ),
-                        ),
                       ),
                     ),
                   ],

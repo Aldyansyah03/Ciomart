@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../services/auth_service.dart';
+import '../viewmodels/auth_viewmodel.dart';
 import '../utils/constants.dart';
 import '../screens/login_screen.dart';
 
@@ -12,7 +12,7 @@ class AppHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<AuthService>().currentUser;
+    final user = context.watch<AuthViewModel>().currentUser;
     
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
@@ -103,7 +103,7 @@ class AppHeader extends StatelessWidget {
               const SizedBox(width: 24),
               ElevatedButton.icon(
                 onPressed: () {
-                  context.read<AuthService>().logout();
+                  context.read<AuthViewModel>().logout();
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (_) => const LoginScreen()),
                     (route) => false,

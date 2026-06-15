@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../services/auth_service.dart';
+import '../viewmodels/auth_viewmodel.dart';
 import '../utils/constants.dart';
 import 'screens/login_screen.dart';
 import 'screens/admin_dashboard.dart';
@@ -10,7 +10,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
       ],
       child: const CiomartApp(),
     ),
@@ -29,7 +29,7 @@ class CiomartApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.brandOrange),
         useMaterial3: true,
       ),
-      home: Consumer<AuthService>(
+      home: Consumer<AuthViewModel>(
         builder: (context, auth, _) {
           if (!auth.isAuthenticated) {
             return const LoginScreen();

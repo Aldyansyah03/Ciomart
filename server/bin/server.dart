@@ -52,6 +52,16 @@ void main(List<String> args) async {
     return _jsonResponse({'success': false, 'message': 'Username atau password salah'}, status: 401);
   });
 
+  app.post('/api/auth/register', (Request request) async {
+    final payload = jsonDecode(await request.readAsString());
+    try {
+      final id = await userRepository.save(payload);
+      return _jsonResponse({'success': true, 'id': id, 'message': 'User registered successfully'});
+    } catch (e) {
+      return _jsonResponse({'success': false, 'message': e.toString()}, status: 400);
+    }
+  });
+
   // ----- Product Routes -----
   app.get('/api/products', (Request request) async {
     final products = await productRepository.findAll();
