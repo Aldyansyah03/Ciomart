@@ -1,0 +1,31 @@
+# Maven
+target/
+*.class
+
+# Python virtual environment and cache
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDEs and editors
+.idea/
+*.iml
+*.iws
+.project
+.classpath
+.settings/
+.nb-configurations.xml
+
+# Flutter & Dart subprojects local config
+**/.packages
+**/pubspec.lock.g.env
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.dart_tool/
+**/build/
+
+# Operating system files
+Thumbs.db
+Desktop.ini
+.DS_Store

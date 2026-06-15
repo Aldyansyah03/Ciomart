@@ -1,0 +1,141 @@
+/* Admin shared styles (included inline by JSP pages) */
+
+:root {
+	--brand-cream: #FEF3E2;
+	--brand-yellow: #FAB12F;
+	--brand-orange: #FA812F;
+	--brand-red: #DD0303;
+
+	--ink: #0f172a;
+	--muted: #475569;
+	--surface: #ffffff;
+	--surface-2: var(--brand-cream);
+	--border: #e2e8f0;
+	--shadow: rgba(2, 6, 23, 0.08);
+
+	--tint-yellow: rgba(250, 177, 47, 0.22);
+	--tint-orange: rgba(250, 129, 47, 0.14);
+	--tint-red: rgba(221, 3, 3, 0.10);
+}
+
+/* ========== Admin Navbar ========== */
+.navbar {
+	position: relative;
+	z-index: 100;
+	background: linear-gradient(180deg, var(--surface), var(--surface-2));
+	border-bottom: 1px solid var(--border);
+	padding: 1rem 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+	backdrop-filter: none;
+	margin-bottom: 2rem;
+}
+
+.nav-brand {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	white-space: nowrap;
+}
+
+.brand-icon {
+	font-size: 2rem;
+	line-height: 1;
+}
+
+.brand-text {
+	font-size: 1.5rem;
+	font-weight: 800;
+	background: linear-gradient(135deg, var(--brand-red), var(--brand-orange));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.nav-menu {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	flex: 1;
+	flex-wrap: wrap;
+	min-width: 260px;
+}
+
+.nav-link {
+	padding: 0.55rem 0.9rem;
+	border-radius: 10px;
+	color: var(--muted);
+	text-decoration: none;
+	font-weight: 600;
+	transition: all 0.2s ease;
+	white-space: nowrap;
+}
+
+.nav-link:hover {
+	background: var(--tint-yellow);
+	color: var(--brand-red);
+}
+
+.nav-link.active {
+	background: rgba(250, 177, 47, 0.22);
+	color: var(--brand-red);
+	box-shadow: 0 10px 24px rgba(250, 129, 47, 0.14);
+}
+
+.nav-user {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	white-space: nowrap;
+}
+
+.user-name {
+	color: var(--ink);
+	font-weight: 600;
+	max-width: 220px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.btn-logout {
+	padding: 0.55rem 0.95rem;
+	border-radius: 10px;
+	background: var(--tint-red);
+	border: 1px solid rgba(221, 3, 3, 0.20);
+	color: var(--brand-red);
+	text-decoration: none;
+	font-weight: 700;
+	transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+	background: rgba(221, 3, 3, 0.16);
+	transform: translateY(-1px);
+}
+
+@media (max-width: 960px) {
+	.navbar {
+		flex-wrap: wrap;
+		padding: 1rem 1.25rem;
+	}
+
+	.nav-menu {
+		order: 3;
+		width: 100%;
+		justify-content: flex-start;
+		min-width: 0;
+	}
+
+	.nav-user {
+		margin-left: auto;
+	}
+}
+
+@media (max-width: 520px) {
+	.user-name {
+		display: none;
+	}
+}
