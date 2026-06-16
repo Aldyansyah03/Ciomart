@@ -18,8 +18,8 @@ class AppColors {
 }
 
 class ApiConstants {
-  // Use local IP for Android emulator/device instead of localhost
-  static const String baseUrl = 'http://10.142.39.172:8082/api';
+  // Use online Render backend URL
+  static const String baseUrl = 'https://ciomart-backend.onrender.com/api';
 }
 
 class AppConstants {
