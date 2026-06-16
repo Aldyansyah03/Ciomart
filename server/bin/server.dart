@@ -164,8 +164,9 @@ void main(List<String> args) async {
       .addMiddleware(corsMiddleware())
       .addHandler(app.call);
 
-  // Use port 8082 to avoid conflict with Tomcat on 8081
-  final server = await io.serve(handler, InternetAddress.anyIPv4, 8082);
+  // Use port 8082 to avoid conflict with Tomcat on 8081, but support environment variable PORT
+  final port = int.tryParse(Platform.environment['PORT'] ?? '') ?? 8082;
+  final server = await io.serve(handler, InternetAddress.anyIPv4, port);
   print('Dart API Server listening on port ${server.port}');
 
   // Shutdown hook
