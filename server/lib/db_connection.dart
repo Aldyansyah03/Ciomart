@@ -14,6 +14,9 @@ class DBConnection {
     final password = Platform.environment['DB_PASSWORD'] ?? '';
     final databaseName = Platform.environment['DB_DATABASE'] ?? 'tokoku';
 
+    final secure = Platform.environment['DB_SECURE'] == 'true' || 
+                   (host != '127.0.0.1' && host != 'localhost' && Platform.environment['DB_SECURE'] != 'false');
+
     _pool ??= MySQLConnectionPool(
       host: host,
       port: port,
@@ -21,7 +24,7 @@ class DBConnection {
       password: password,
       databaseName: databaseName,
       maxConnections: 10,
-      secure: false,
+      secure: secure,
     );
     return _pool!;
   }
