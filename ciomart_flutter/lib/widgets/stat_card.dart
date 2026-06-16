@@ -18,8 +18,10 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isMobile ? 14 : 24),
       decoration: BoxDecoration(
         color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(16),
@@ -36,7 +38,7 @@ class StatCard extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Positioned(
-            top: -24,
+            top: isMobile ? -14 : -24,
             left: 0,
             right: 0,
             child: Container(
@@ -50,24 +52,29 @@ class StatCard extends StatelessWidget {
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(icon, style: const TextStyle(fontSize: 40)),
-              const SizedBox(height: 16),
+              Text(icon, style: TextStyle(fontSize: isMobile ? 28 : 40)),
+              SizedBox(height: isMobile ? 8 : 16),
               Text(
                 value,
                 style: GoogleFonts.inter(
-                  fontSize: 32,
+                  fontSize: isMobile ? 18 : 32,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: isMobile ? 4 : 8),
               Text(
                 title,
                 style: GoogleFonts.inter(
-                  fontSize: 14,
+                  fontSize: isMobile ? 11 : 14,
                   color: AppColors.textSecondary,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

@@ -49,6 +49,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Column(
@@ -56,14 +58,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
           const AppHeader(title: 'Admin Dashboard'),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(32.0),
+              padding: EdgeInsets.all(isMobile ? 16.0 : 32.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     '📊 Dashboard Admin',
                     style: GoogleFonts.inter(
-                      fontSize: 32,
+                      fontSize: isMobile ? 24 : 32,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
                     ),
@@ -72,21 +74,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   Text(
                     'Selamat datang di sistem manajemen CIOMART',
                     style: GoogleFonts.inter(
-                      fontSize: 16,
+                      fontSize: isMobile ? 14 : 16,
                       color: AppColors.textSecondary,
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  SizedBox(height: isMobile ? 24 : 32),
 
                   if (_isLoading)
                     const Center(child: CircularProgressIndicator())
                   else
                     GridView.count(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 24,
-                      mainAxisSpacing: 24,
+                      crossAxisCount: isMobile ? 2 : 4,
+                      crossAxisSpacing: isMobile ? 12 : 24,
+                      mainAxisSpacing: isMobile ? 12 : 24,
                       shrinkWrap: true,
-                      childAspectRatio: 1.5,
+                      childAspectRatio: isMobile ? 1.05 : 1.5,
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
                         StatCard(
@@ -101,7 +103,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           themeColor: AppColors.success,
                         ),
                         StatCard(
-                          title: 'Penjualan Hari Ini (${_stats['todaySales'] ?? 0} transaksi)',
+                          title: 'Penjualan Hari Ini',
                           value: NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0).format(_stats['todayRevenue'] ?? 0),
                           icon: '💰',
                         ),
@@ -114,37 +116,37 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ],
                     ),
 
-                  const SizedBox(height: 48),
+                  SizedBox(height: isMobile ? 24 : 48),
 
                   GridView.count(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 24,
-                    mainAxisSpacing: 24,
+                    crossAxisCount: isMobile ? 2 : 4,
+                    crossAxisSpacing: isMobile ? 12 : 24,
+                    mainAxisSpacing: isMobile ? 12 : 24,
                     shrinkWrap: true,
-                    childAspectRatio: 1.2,
+                    childAspectRatio: isMobile ? 0.9 : 1.2,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       _MenuCard(
                         title: 'Kelola Produk',
-                        description: 'Tambah, edit, dan hapus produk. Atur stok dan harga barang.',
+                        description: 'Atur stok dan harga barang.',
                         icon: '📦',
                         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ProductsAdminScreen())),
                       ),
                       _MenuCard(
                         title: 'Kelola Kategori',
-                        description: 'Manajemen kategori produk untuk pengelompokan barang.',
+                        description: 'Manajemen kategori produk.',
                         icon: '🏷️',
                         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CategoriesAdminScreen())),
                       ),
                       _MenuCard(
                         title: 'Laporan Penjualan',
-                        description: 'Lihat laporan penjualan harian, bulanan, dan statistik.',
+                        description: 'Lihat laporan harian & bulanan.',
                         icon: '📊',
                         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ReportsAdminScreen())),
                       ),
                       _MenuCard(
                         title: 'Kelola Pengguna',
-                        description: 'Manajemen akun admin dan kasir dalam sistem.',
+                        description: 'Manajemen akun admin & kasir.',
                         icon: '👥',
                         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const UsersAdminScreen())),
                       ),
@@ -175,13 +177,15 @@ class _MenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
         child: Container(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(isMobile ? 16 : 24),
           decoration: BoxDecoration(
             color: AppColors.cardBg,
             borderRadius: BorderRadius.circular(20),
@@ -189,10 +193,11 @@ class _MenuCard extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 60,
-                height: 60,
+                width: isMobile ? 48 : 60,
+                height: isMobile ? 48 : 60,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -202,30 +207,32 @@ class _MenuCard extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: AppColors.brandOrange.withOpacity(0.18)),
                 ),
                 child: Center(
-                  child: Text(icon, style: const TextStyle(fontSize: 32)),
+                  child: Text(icon, style: TextStyle(fontSize: isMobile ? 24 : 32)),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: isMobile ? 12 : 24),
               Text(
                 title,
                 style: GoogleFonts.inter(
-                  fontSize: 20,
+                  fontSize: isMobile ? 14 : 20,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Text(
                 description,
                 style: GoogleFonts.inter(
-                  fontSize: 14,
+                  fontSize: isMobile ? 11 : 14,
                   color: AppColors.textSecondary,
-                  height: 1.5,
+                  height: 1.3,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
